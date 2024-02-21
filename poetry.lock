@@ -268,6 +268,21 @@ files = [
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
+name = "pydantic-mongo"
+version = "2.1.0"
+description = "Document object mapper for pydantic and pymongo"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "pydantic-mongo-2.1.0.tar.gz", hash = "sha256:5e118d01b6d9a9da383fb1ae7339408c383288f8025e926068f60c2c5ed5dbdf"},
+    {file = "pydantic_mongo-2.1.0-py2.py3-none-any.whl", hash = "sha256:69cd35d6f7591454388af0cbc86ec4c64fed5cabb664a8d96ccc61dd559d1972"},
+]
+
+[package.dependencies]
+pydantic = ">=2.0.2,<3.0.0"
+pymongo = ">=4.3,<5.0"
+
+[[package]]
 name = "pymongo"
 version = "4.6.1"
 description = "Python driver for MongoDB <http://www.mongodb.org>"
@@ -442,4 +457,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "dfb3b5deee15d1ca3496eb306106816ffa227a07dd27b88584e56a9ba8131d9a"
+content-hash = "b69c352086a5f8e048b270925e6e65ccf8cd5cf29ea2144b878ebb52647c06e2"
