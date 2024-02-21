@@ -1,9 +1,11 @@
 from contextlib import asynccontextmanager
+
 import uvicorn
+from config import Settings
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from config import Settings
+
 from app.routers.cars import cars_router
 
 
@@ -34,8 +36,5 @@ app.add_middleware(
 # Registering routers
 app.include_router(cars_router)
 
-if __name__ == '__main__':
-    uvicorn.run(
-        "main:app",
-        reload=True
-    )
+if __name__ == "__main__":
+    uvicorn.run("main:app", reload=True)

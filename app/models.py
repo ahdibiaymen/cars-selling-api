@@ -1,6 +1,7 @@
-from pydantic import BaseModel, Field, BaseConfig, field_serializer
-from pydantic_mongo import ObjectIdField
 from typing import Optional
+
+from pydantic import BaseModel, Field
+from pydantic_mongo import ObjectIdField
 
 
 class CarModelBase(BaseModel):
@@ -12,9 +13,11 @@ class CarModelBase(BaseModel):
     price: int = Field(..., ge=1000, le=100000)
 
     def __init__(self, /, **data):
-        data['make'] = str(data.get('make', ''))  # Convert make to string for models with make as int
+        data["make"] = str(
+            data.get("make", "")
+        )  # Convert make to string for models with make as int
         super().__init__(**data)
 
 
 class CarModelFull(CarModelBase):
-    id: Optional[ObjectIdField] = Field(alias='_id')
+    id: Optional[ObjectIdField] = Field(alias="_id")
