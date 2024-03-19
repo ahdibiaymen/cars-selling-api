@@ -15,7 +15,7 @@ class CarModelBase(BaseModel):
     def __init__(self, /, **data):
         data["make"] = str(
             data.get("make", "")
-        )  # Convert make to string for models with make as int
+        )  # Convert 'make' to a string for models with make as int
         super().__init__(**data)
 
 
