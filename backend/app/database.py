@@ -7,5 +7,3 @@ async def mongodb_client() -> AsyncIOMotorDatabase:
     database = AsyncIOMotorClient(Settings.DB_URL)
     client = database[Settings.DB_NAME]
     yield client
-
-

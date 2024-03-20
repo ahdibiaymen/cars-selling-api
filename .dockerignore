@@ -1,0 +1,32 @@
+# Exclude common editor and IDE files
+.vscode/
+.idea/
+*.iml
+*.pyc
+
+# Exclude version control files and directories
+.git/
+.gitignore
+
+# Exclude Python virtual environment files
+venv/
+backend/app/.env/
+
+# Exclude development and testing-related files
+__pycache__/
+tests/
+*.pytest_cache/
+
+# Exclude local development configuration files
+*.local
+*.log
+backend/.pre-commit.yaml
+
+# Exclude any sensitive or confidential information
+*.secret
+*.key
+*.env
+
+
+# Exclude application test files
+/backend/app/tests
