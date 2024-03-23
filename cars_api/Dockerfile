@@ -16,6 +16,6 @@ RUN apk add --no-cache gcc musl-dev linux-headers
 RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 8000
-ENTRYPOINT ["./docker-entrypoint.sh"]
-
 USER $USERNAME
+
+ENTRYPOINT ["./docker-entrypoint.sh"]

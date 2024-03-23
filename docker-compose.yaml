@@ -11,10 +11,10 @@ services:
   app:
     container_name: "car_api_backend"
     build:
-      context: ./backend
+      context: cars_api
       dockerfile: ./Dockerfile
     env_file:
-      - ./backend/.env
+      - cars_api/.env
     ports:
       - 8000:8000
 #    depends_on:

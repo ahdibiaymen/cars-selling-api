@@ -10,7 +10,7 @@
 
 # Exclude Python virtual environment files
 venv/
-backend/app/.env/
+cars_api/app/.env/
 
 # Exclude development and testing-related files
 __pycache__/
@@ -20,7 +20,7 @@ tests/
 # Exclude local development configuration files
 *.local
 *.log
-backend/.pre-commit.yaml
+cars_api/.pre-commit.yaml
 
 # Exclude any sensitive or confidential information
 *.secret
@@ -29,4 +29,4 @@ backend/.pre-commit.yaml
 
 
 # Exclude application test files
-/backend/app/tests
+/cars_api/app/tests
