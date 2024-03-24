@@ -16,7 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
+    env:
+      DB_URL : ''
+      DB_NAME : ''
+      COLLECTION_NAME : ''
     steps:
       - uses: actions/checkout@v3
 
