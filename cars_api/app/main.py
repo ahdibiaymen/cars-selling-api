@@ -1,8 +1,9 @@
 import uvicorn
-from app.config import Settings
-from app.routers.cars import cars_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.config import Settings
+from app.routers.cars import cars_router
 
 app = FastAPI()
 

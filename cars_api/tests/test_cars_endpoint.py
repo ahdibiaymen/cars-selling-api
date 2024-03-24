@@ -2,9 +2,10 @@ import json
 from unittest import mock
 
 import pytest
+from dotmap import DotMap
+
 from app.database import mongodb_client
 from app.models import CarModelBase
-from dotmap import DotMap
 from tests.conftest import mongodb_client_mock
 
 
