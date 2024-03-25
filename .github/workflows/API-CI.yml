@@ -82,7 +82,7 @@ jobs:
 
     - name: Test with pytest
       run: |
-          pytest --ignore-warnings
+          pytest --disable-warnings
 
 
   code-security-check:
