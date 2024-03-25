@@ -51,9 +51,9 @@ jobs:
       contents: read
 
     env:
-      DB_URL : ''
-      DB_NAME : ''
-      COLLECTION_NAME : ''
+      DB_URL : 'test'
+      DB_NAME : 'test'
+      COLLECTION_NAME : 'test'
 
     steps:
     - uses: actions/checkout@v3
