@@ -141,8 +141,9 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
-        MONGO_INITDB_ROOT_USERNAME: root
-        MONGO_INITDB_ROOT_PASSWORD: root
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: root
         options: >-
           --health-cmd mongo
           --health-interval 10s
