@@ -116,11 +116,6 @@ jobs:
       - name: PyCharm Python Security Scanner
         uses: tonybaloney/pycharm-security@1.25.1
 
-      - name: Official SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v2.0.1
-
-
-
       - name: Build an image of car-selling-api
         run: |
           docker build -t car-api:latest .
@@ -137,7 +132,7 @@ jobs:
 
 
   code-security-check-DAST:
-    needs: lint-and-test
+    needs: code-security-check-SAST
     runs-on: ubuntu-latest
 
     steps:
