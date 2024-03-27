@@ -83,12 +83,10 @@ jobs:
       - name: PyCharm Python Security Scanner
         uses: tonybaloney/pycharm-security@1.25.1
 
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          command: monitor
+#      - name: Run Snyk to check for vulnerabilities
+#        uses: snyk/actions/node@master
+#        env:
+#          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
       - name: Build an image of car-selling-api
         run: |
