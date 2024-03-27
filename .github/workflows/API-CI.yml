@@ -142,11 +142,11 @@ jobs:
           env:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: root
-#          options: >-
-#            --health-cmd mongo
-#            --health-interval 10s
-#            --health-timeout 5s
-#            --health-retries 5
+          options: >-
+            --health-cmd mongo
+            --health-interval 10s
+            --health-timeout 5s
+            --health-retries 5
           ports:
             - 27017:27017
 
@@ -183,10 +183,18 @@ jobs:
           sed -i "s/^COLLECTION_NAME=.*/COLLECTION_NAME=$DB_USER/" .env
           sed -i "s/^MODE=.*/MODE=$MODE/" .env
 
+          echo env content!!!
+          cat .env
+
       - name: Run application Docker container
         run: |
           docker build -t car-api:latest .
           docker run --name car-api-app -p 8000:8000 --env-file .env -d car-api:latest
+
+      - name: Wait for App to Start
+        run: |
+          sleep 10s
+          docker ps -a
 
       - name: App healthiness test
         run: |
