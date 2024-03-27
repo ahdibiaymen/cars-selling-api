@@ -95,7 +95,7 @@ jobs:
       - name: Upload image artifact
         uses: actions/upload-artifact@v3
         with:
-          name: car-api:latest
+          name: car-api
           path: /tmp/car-api.tar
 
       - name: Run Trivy vulnerability scanner
@@ -160,7 +160,7 @@ jobs:
       - name: Download image artifact
         uses: actions/download-artifact@v3
         with:
-          name: car-api:latest
+          name: car-api
           path: /tmp/
 
       - name: Load image
