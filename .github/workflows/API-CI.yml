@@ -142,19 +142,13 @@ jobs:
           env:
             MONGO_INITDB_ROOT_USERNAME: root
             MONGO_INITDB_ROOT_PASSWORD: root
-            MONGO_INITDB_DATABASE: cars_db
-          options: >-
-            --health-cmd mongo
-            --health-interval 10s
-            --health-timeout 5s
-            --health-retries 5
+#          options: >-
+#            --health-cmd mongo
+#            --health-interval 10s
+#            --health-timeout 5s
+#            --health-retries 5
           ports:
             - 27017:27017
-    env:
-      DB_URL: mongodb://admin:admin@localhost:27017/cars_db
-      DB_NAME: cars_db
-      COLLECTION_NAME: cars
-      MODE: dev
 
     steps:
       - uses: actions/checkout@v3
@@ -177,6 +171,11 @@ jobs:
           EOF
 
       - name: Set up .env file for dev
+        env:
+          DB_URL: mongodb://admin:admin@localhost:27017/cars_db
+          DB_NAME: cars_db
+          COLLECTION_NAME: cars
+          MODE: dev
         run: |
           cp .env.sample .env
           sed -i "s/^DB_URL=.*/DB_URL=$DB_HOST/" .env
