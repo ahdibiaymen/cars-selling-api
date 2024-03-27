@@ -88,9 +88,15 @@ jobs:
 #        env:
 #          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      - name: Build an image of car-selling-api
+      - name: Build the image of car-selling-api
         run: |
           docker build -t car-api:latest .
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: car-api:latest
+          path: /tmp/car-api.tar
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
@@ -149,6 +155,12 @@ jobs:
           sed -i "s/^DB_NAME=.*/DB_NAME=$DB_PORT/" .env
           sed -i "s/^COLLECTION_NAME=.*/COLLECTION_NAME=$DB_USER/" .env
           sed -i "s/^MODE=.*/MODE=$MODE/" .env
+
+      - name: Download image artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: car-api:latest
+          path: /tmp/
 
       - name: Run application Docker container
         run: |
