@@ -116,9 +116,9 @@ jobs:
 #      - name: PyCharm Python Security Scanner
 #        uses: tonybaloney/pycharm-security@1.25.1
 
-      - name: Build an image of car-selling-api
-        run: |
-          docker build -t car-api:latest .
+#      - name: Build an image of car-selling-api
+#        run: |
+#          docker build -t car-api:latest .
 
 #      - name: Run Trivy vulnerability scanner
 #        uses: aquasecurity/trivy-action@master
@@ -132,20 +132,60 @@ jobs:
 
 
   code-security-check-DAST:
-    needs: code-security-check-SAST
+#    needs: code-security-check-SAST
     runs-on: ubuntu-latest
     permissions:
       contents: read
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: root
+        options: >-
+          --health-cmd mongo
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          --name mongodb
+    env:
+      DB_URL: mongodb://admin:admin@localhost:27017/cars_db
+      DB_NAME: cars_db
+      COLLECTION_NAME: cars
+      MODE: dev
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: LS
+      - name: Install Mongosh
         run: |
-          ls -la
+          sudo apt-get install gnupg
+          wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-7.0.asc
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-mongosh
+          mongosh --version
+
+      - name: Initialize MongoDB for dev environment
+        run: |
+          mongosh --host localhost:27017 -u root -p root --authenticationDatabase admin <<EOF
+            db = db.getSiblingDB('cars_db');
+            db.createUser({ user: 'admin', pwd: 'admin', roles: [{ role: 'readWrite', db: 'cars_db' }] })
+            db.createCollection('cars');
+          EOF
+
+      - name: Set up .env file for dev
+        run: |
+          cp .env.sample .env
+          sed -i "s/^DB_URL=.*/DB_URL=$DB_HOST/" .env
+          sed -i "s/^DB_NAME=.*/DB_NAME=$DB_PORT/" .env
+          sed -i "s/^COLLECTION_NAME=.*/COLLECTION_NAME=$DB_USER/" .env
+          sed -i "s/^MODE=.*/MODE=$MODE/" .env
 
       - name: Run application Docker container
         run: |
+          docker build -t car-api:latest .
           docker run --name car-api-app -p 8000:8000 --env-file .env -d car-api:latest
 
       - name: App healthiness test
