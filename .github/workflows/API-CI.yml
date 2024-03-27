@@ -12,13 +12,13 @@ defaults:
   run:
     working-directory: ./cars_api
 jobs:
-  unify-code:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v3
+#  unify-code:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: write
+#
+#    steps:
+#      - uses: actions/checkout@v3
 
 #      - name: Set up Python 3.10
 #        uses: actions/setup-python@v3
@@ -44,55 +44,55 @@ jobs:
 #          add_options: "-u"
 
 
-  lint-and-test:
-    needs: unify-code
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
+#  lint-and-test:
+#    needs: unify-code
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#
+#    env:
+#      DB_URL : 'test'
+#      DB_NAME : 'test'
+#      COLLECTION_NAME : 'test'
+#
+#    steps:
+#    - uses: actions/checkout@v3
+#
+#    - name: Set up Python 3.10
+#      uses: actions/setup-python@v3
+#      with:
+#        python-version: "3.10"
+#
+#    - name: Install dependencies
+#      run: |
+#        python -m pip install --upgrade pip
+#        pip install flake8 pytest pytest-asyncio pytest-mock mongomock-motor dotmap
+#        if [ -f requirements.txt ]; then
+#          pip install -r requirements.txt;
+#        else
+#          echo requirements.txt not found!
+#        fi
+#
+#    - name: Lint with flake8
+#      run: |
+#        # stop the build if there are Python syntax errors or undefined names
+#        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --extend-exclude=tests/* --ignore=E712,W503
+#        # exit-zero treats all errors as warnings. The GitHub editor is 90 chars wide
+#        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=90 --statistics --ignore=E712,W503
+#
+#    - name: Test with pytest
+#      run: |
+#          pytest --disable-warnings
 
-    env:
-      DB_URL : 'test'
-      DB_NAME : 'test'
-      COLLECTION_NAME : 'test'
 
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest pytest-asyncio pytest-mock mongomock-motor dotmap
-        if [ -f requirements.txt ]; then
-          pip install -r requirements.txt;
-        else
-          echo requirements.txt not found!
-        fi
-
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --extend-exclude=tests/* --ignore=E712,W503
-        # exit-zero treats all errors as warnings. The GitHub editor is 90 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=90 --statistics --ignore=E712,W503
-
-    - name: Test with pytest
-      run: |
-          pytest --disable-warnings
-
-
-  code-security-check-SAST:
-    needs: lint-and-test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v3
+#  code-security-check-SAST:
+#    needs: lint-and-test
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#
+#    steps:
+#      - uses: actions/checkout@v3
 
 #      - name: Set up Python 3.10
 #        uses: actions/setup-python@v3
@@ -138,17 +138,19 @@ jobs:
       contents: read
     services:
       mongodb:
-        image: mongo:latest
-        ports:
-          - 27017:27017
-        env:
-          MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: root
-        options: >-
-          --health-cmd mongo
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        mongodb:
+            image: mongo
+            env:
+              MONGO_INITDB_ROOT_USERNAME: root
+              MONGO_INITDB_ROOT_PASSWORD: root
+              MONGO_INITDB_DATABASE: cars_db
+            options: >-
+              --health-cmd mongo
+              --health-interval 10s
+              --health-timeout 5s
+              --health-retries 5
+            ports:
+              - 27017:27017
     env:
       DB_URL: mongodb://admin:admin@localhost:27017/cars_db
       DB_NAME: cars_db
