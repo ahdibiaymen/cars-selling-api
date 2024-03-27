@@ -156,11 +156,16 @@ jobs:
           sed -i "s/^COLLECTION_NAME=.*/COLLECTION_NAME=$DB_USER/" .env
           sed -i "s/^MODE=.*/MODE=$MODE/" .env
 
+
       - name: Download image artifact
         uses: actions/download-artifact@v3
         with:
           name: car-api:latest
           path: /tmp/
+
+      - name: Load image
+        run: |
+          docker load --input /tmp/car-api.tar
 
       - name: Run application Docker container
         run: |
