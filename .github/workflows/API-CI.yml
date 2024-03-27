@@ -140,6 +140,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: LS
+        run: |
+          ls -la
+
       - name: Run application Docker container
         run: |
           docker run --name car-api-app -p 8000:8000 --env-file .env -d car-api:latest
