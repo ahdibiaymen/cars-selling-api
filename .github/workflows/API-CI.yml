@@ -83,6 +83,13 @@ jobs:
       - name: PyCharm Python Security Scanner
         uses: tonybaloney/pycharm-security@1.25.1
 
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: monitor
+
       - name: Build an image of car-selling-api
         run: |
           docker build -t car-api:latest .
@@ -99,7 +106,7 @@ jobs:
 
 
   code-security-check-DAST:
-#    needs: code-security-check-SAST
+    needs: code-security-check-SAST
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -145,64 +152,54 @@ jobs:
           sed -i "s/^COLLECTION_NAME=.*/COLLECTION_NAME=$DB_USER/" .env
           sed -i "s/^MODE=.*/MODE=$MODE/" .env
 
-          echo env content!!!
-          cat .env
-
       - name: Run application Docker container
         run: |
-          docker build -t car-api:latest .
           docker run --name car-api-app -p 8000:8000 --env-file .env -d car-api:latest
 
-      - name: Wait for App to Start
+      - name: Wait for app to start
         run: |
-          sleep 10s
-          docker ps -a
+          sleep 5s
 
       - name: App healthiness test
         run: |
           curl http://localhost:8000/docs
 
-      - name: ZAP Basic Scan
-        uses: zaproxy/action-baseline@v0.11.0
+      - name: ZAP API Scan
+        uses: zaproxy/action-api-scan@v0.6.0
         with:
           target: 'http://localhost:8000'
-          cmd_options: '-a'
-
-      - name: ZAP Full Scan
-        uses: zaproxy/action-full-scan@v0.9.0
-        with:
-          target: 'http://localhost:8000'
+          format: openapi
           cmd_options: '-a'
 
 
-  unify-code:
-    needs: code-security-check-DAST
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.10"
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install black isort
-
-      - name: Python Isort
-        run: |
-          isort --profile black --line-length 100 .
-      - name: Python Black
-        run: |
-          black --line-length=100 --preview .
-
-      - name: Auto-commit updated files
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: Automated code unifying
-          add_options: "-u"
+#  unify-code:
+#    needs: code-security-check-DAST
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: write
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#
+#      - name: Set up Python 3.10
+#        uses: actions/setup-python@v3
+#        with:
+#          python-version: "3.10"
+#
+#      - name: Install dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install black isort
+#
+#      - name: Python Isort
+#        run: |
+#          isort --profile black --line-length 100 .
+#      - name: Python Black
+#        run: |
+#          black --line-length=100 --preview .
+#
+#      - name: Auto-commit updated files
+#        uses: stefanzweifel/git-auto-commit-action@v5
+#        with:
+#          commit_message: Automated code unifying
+#          add_options: "-u"
