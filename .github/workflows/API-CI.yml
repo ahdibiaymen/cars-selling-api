@@ -87,15 +87,18 @@ jobs:
 #        uses: snyk/actions/node@master
 #        env:
 #          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
 
       - name: Build the image of car-selling-api
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          tags: car-api:latest
-          outputs: type=docker,dest=/tmp/car-api.tar
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          tags: car-api:staging
+#          outputs: type=docker,dest=/tmp/car-api.tar
+        run: |
+          docker build -t car-api:staging .
+          docker save --output /tmp/car-api.tar car-api:staging
 
       - name: Upload image artifact
         uses: actions/upload-artifact@v3
@@ -174,7 +177,7 @@ jobs:
 
       - name: Run application Docker container
         run: |
-          docker run --name car-api-app -p 8000:8000 --env-file .env -d car-api:latest
+          docker run --name car-api-app -p 8000:8000 --env-file .env -d car-api:staging
 
       - name: Wait for app to start
         run: |
