@@ -121,7 +121,7 @@ jobs:
     needs: code-security-check-SAST
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
     services:
       mongodb:
           image: mongo
@@ -193,6 +193,7 @@ jobs:
           target: 'http://localhost:8000'
           format: openapi
           cmd_options: '-a'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
 
 #  unify-code:
